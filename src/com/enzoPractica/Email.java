@@ -26,32 +26,28 @@ public class Email {
     private int mailboxCapacity;
     private List<String> savedEmails;
 
-
-
     public Email(String firstName, String lastName) {
-
         try {
-
             this.firstName = firstName;
             this.lastName = lastName;
             this.department = setDepartment();
             this.password = randomPassword(defaultPasswordLength);
-            System.out.println("Your password is: " + this.password);
             this.email = firstName.toLowerCase(Locale.ROOT) + "." + lastName.toLowerCase(Locale.ROOT) + "@" + department + "." + EmailConstants.COMPANY_SUFFIX;
-            this.savedEmails = saveEmail(setAlternatedEmail());
-            System.out.println("These are your emails: " + savedEmails);
-
+            this.alternateEmail = setAlternatedEmail(alternateEmail) + "." + lastName.toLowerCase(Locale.ROOT) + "@" + department + "." + EmailConstants.COMPANY_SUFFIX;
+            this.savedEmails = saveEmail(alternateEmail);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
-    public String showInfo(){
-        return "Display name: " + firstName+ " " + lastName +
-                "Company email: " + email+ " " +
-                "Mailbox capaity: " + mailboxCapacity+ " mb";
+
+    public String showInfo() {
+        return "Display name: " + firstName + " " + lastName + "\n" +
+                "Company email: " + email + "\n" +
+                "Password: " + password + "\n" +
+                "Mailbox capaity: " + mailboxCapacity + " mb\n" +
+                "Saved Emails: " + savedEmails;
     }
+
     private String setDepartment() throws Exception {
         try {
             System.out.println("Entrer\n1 for sales\n2 for develompent\n3 for Accounting\n0 for none\nEnter department code: ");
@@ -81,13 +77,11 @@ public class Email {
         return new String(password);
     }
 
-
-    private String setAlternatedEmail() {
+    private String setAlternatedEmail(String email) {
         System.out.println("Set a new alternate email");
         Scanner emails = new Scanner(System.in);
         String newEmail = emails.next();
-        this.alternateEmail = newEmail;
-        return alternateEmail;
+        return alternateEmail = newEmail;
     }
 
     private List<String> saveEmail(String savedEmail) throws Exception {
@@ -95,11 +89,8 @@ public class Email {
         try {
             emails.add(email);
             setAlternateEmail(savedEmail);
-            if (setAlternatedEmail() == null) {
-                return Collections.singletonList(EmailConstants.EXCEPTION_SCANNER);
-            } else {
-                emails.add(alternateEmail);
-            }
+            emails.add(alternateEmail);
+
         } catch (Exception e) {
             throw new Exception(EmailConstants.EXCEPTION_SCANNER, e);
         }
